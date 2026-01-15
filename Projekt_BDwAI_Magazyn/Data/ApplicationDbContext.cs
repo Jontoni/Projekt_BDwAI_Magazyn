@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Projekt_BDwAI_Magazyn.Models;
 
 namespace Projekt_BDwAI_Magazyn.Data
 {
@@ -9,5 +10,6 @@ namespace Projekt_BDwAI_Magazyn.Data
             : base(options)
         {
         }
+        public DbSet<Product> Products { get; set; }
     }
 }
