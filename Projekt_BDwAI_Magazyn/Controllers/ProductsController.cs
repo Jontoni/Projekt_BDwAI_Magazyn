@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Projekt_BDwAI_Magazyn.Data;
 using Projekt_BDwAI_Magazyn.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Projekt_BDwAI_Magazyn.Controllers
 {
@@ -44,6 +45,7 @@ namespace Projekt_BDwAI_Magazyn.Controllers
         }
 
         // GET: Products/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +56,7 @@ namespace Projekt_BDwAI_Magazyn.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,Name,Sku,Price,QuantityInStock,CreatedAt")] Product product)
         {
             if (ModelState.IsValid)
@@ -66,6 +69,7 @@ namespace Projekt_BDwAI_Magazyn.Controllers
         }
 
         // GET: Products/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +90,7 @@ namespace Projekt_BDwAI_Magazyn.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Sku,Price,QuantityInStock,CreatedAt")] Product product)
         {
             if (id != product.Id)
@@ -117,6 +122,7 @@ namespace Projekt_BDwAI_Magazyn.Controllers
         }
 
         // GET: Products/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,6 +143,7 @@ namespace Projekt_BDwAI_Magazyn.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _context.Products.FindAsync(id);
