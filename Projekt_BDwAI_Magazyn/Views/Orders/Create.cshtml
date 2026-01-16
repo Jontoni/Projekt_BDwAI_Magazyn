@@ -1,0 +1,101 @@
+﻿@model Projekt_BDwAI_Magazyn.ViewModels.OrderCreateVm
+@{
+    ViewData["Title"] = "Nowe zamówienie";
+}
+
+<h1>Nowe zamówienie</h1>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Notes" class="form-label"></label>
+        <input asp-for="Notes" class="form-control" />
+        <span asp-validation-for="Notes" class="text-danger"></span>
+    </div>
+
+    <hr />
+    <h4>Pozycje</h4>
+
+    <table class="table" id="itemsTable">
+        <thead>
+            <tr>
+                <th>Produkt</th>
+                <th style="width:140px;">Ilość</th>
+                <th style="width:120px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <select class="form-select" name="Items[@i].ProductId">
+                            <option value="">-- wybierz --</option>
+                            @foreach (var p in Model.Products)
+                            {
+                                <option value="@p.Value" selected="@(p.Value == Model.Items[i].ProductId.ToString() ? "selected" : null)">
+                                    @p.Text
+                                </option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <input class="form-control" type="number" min="1" name="Items[@i].Quantity" value="@Model.Items[i].Quantity" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Usuń</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-outline-secondary" onclick="addRow()">+ Dodaj pozycję</button>
+
+    <hr />
+    <button type="submit" class="btn btn-primary">Zapisz zamówienie</button>
+    <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function addRow() {
+            const tbody = document.querySelector("#itemsTable tbody");
+            const index = tbody.querySelectorAll("tr").length;
+
+            const productsHtml = `@Html.Raw(string.Join("", Model.Products.Select(p =>
+                            $"<option value=\\\"{p.Value}\\\">{System.Net.WebUtility.HtmlEncode(p.Text)}</option>")))`;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>
+                <select class="form-select" name="Items[${index}].ProductId">
+                    <option value="">-- wybierz --</option>
+                    ${productsHtml}
+                </select>
+            </td>
+            <td>
+                <input class="form-control" type="number" min="1" name="Items[${index}].Quantity" value="1" />
+            </td>
+            <td>
+                <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Usuń</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+        function removeRow(btn) {
+            btn.closest("tr").remove();
+
+            const rows = document.querySelectorAll("#itemsTable tbody tr");
+            rows.forEach((r, i) => {
+                r.querySelectorAll("select, input").forEach(el => {
+                    el.name = el.name.replace(/Items\[\d+\]/, `Items[${i}]`);
+                });
+            });
+        }
+    </script>
+}
