@@ -41,6 +41,7 @@ File → Open → Project/Solution
 Aplikacja wykorzystuje bazę danych SQLite.
 
 Łańcuch połączenia znajduje się w pliku appsettings.json:
+
 "ConnectionStrings": {
   "DefaultConnection": "Data Source=app.db"
 }
@@ -98,6 +99,7 @@ Aplikacja wykorzystuje **ASP.NET Core Identity**.
 - **Admin**
   - zarządzanie produktami
   - zarządzanie zamówieniami (anulowanie, realizacja)
+  - Dane logowania do admina login: admin@local.test hasło: Admin123!
 
 - **Użytkownik**
   - przeglądanie produktów
