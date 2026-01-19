@@ -1,8 +1,128 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Magazyn PRO - System Zarządzania";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4 mb-4">🏭 Magazyn PRO</h1>
+    <p class="lead mb-5">Profesjonalny system zarządzania magazynem i zamówieniami</p>
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">🚀 Szybki dostęp</h5>
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-3">
+                            <a asp-controller="Products" asp-action="Index" class="btn btn-outline-primary btn-lg w-100 py-3">
+                                <i class="bi bi-box-seam"></i><br />
+                                Produkty
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a asp-controller="Orders" asp-action="Index" class="btn btn-outline-success btn-lg w-100 py-3">
+                                <i class="bi bi-cart-check"></i><br />
+                                Zamówienia
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">📦 Zarządzanie produktami</h5>
+                    <p class="card-text">Dodawaj, edytuj i przeglądaj produkty w magazynie. Śledź stany magazynowe w czasie rzeczywistym.</p>
+                    <a asp-controller="Products" asp-action="Index" class="btn btn-primary">Przejdź do produktów</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">🛒 System zamówień</h5>
+                    <p class="card-text">Twórz nowe zamówienia, śledź ich status i zarządzaj realizacją. Anuluj zamówienia z automatycznym zwrotem towaru.</p>
+                    <a asp-controller="Orders" asp-action="Index" class="btn btn-success">Przejdź do zamówień</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">👥 Role użytkowników</h5>
+                    <p class="card-text">
+                        <strong>Administrator:</strong> Pełny dostęp do wszystkich funkcji<br />
+                        <strong>Użytkownik:</strong> Przeglądanie i składanie zamówień
+                    </p>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-dark">Zaloguj się</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statystyki (tylko dla zalogowanych adminów) -->
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <div class="mt-5">
+            <h4>📊 Statystyki systemu</h4>
+            <div class="row justify-content-center">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number" id="productsCount">...</div>
+                        <div class="stat-label">Produktów w magazynie</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number" id="ordersCount">...</div>
+                        <div class="stat-label">Aktywnych zamówień</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number" id="lowStockCount">...</div>
+                        <div class="stat-label">Produktów z niskim stanem</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Tu możesz dodać AJAX do pobierania rzeczywistych statystyk
+                // Na razie pokażemy przykładowe dane
+                document.getElementById('productsCount').textContent = '24';
+                document.getElementById('ordersCount').textContent = '7';
+                document.getElementById('lowStockCount').textContent = '3';
+            });
+        </script>
+
+        <style>
+            .stat-card {
+                background: #f8f9fa;
+                border-radius: 10px;
+                padding: 20px;
+                text-align: center;
+                border: 1px solid #dee2e6;
+            }
+            .stat-number {
+                font-size: 2.5rem;
+                font-weight: bold;
+                color: #0d6efd;
+            }
+            .stat-label {
+                color: #6c757d;
+                font-size: 0.9rem;
+                margin-top: 5px;
+            }
+        </style>
+    }
 </div>
