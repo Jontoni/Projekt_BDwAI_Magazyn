@@ -1,0 +1,108 @@
+﻿@model Projekt_BDwAI_Magazyn.Models.Order
+@using Projekt_BDwAI_Magazyn.Models
+
+@{
+    ViewData["Title"] = "Nowe zamówienie";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Wybierz produkty do zamówienia</h4>
+<hr />
+
+<form asp-action="Create" method="post" id="orderForm">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label>Dostępne produkty:</label>
+        <div id="productsContainer">
+            @{
+                var products = ViewBag.Products as List<Product> ?? new List<Product>();
+                for (int i = 0; i < products.Count; i++)
+                {
+                    var product = products[i];
+                    <div class="product-item mb-2 p-2 border rounded">
+                        <div class="form-check">
+                            <input type="checkbox"
+                                   class="form-check-input product-checkbox"
+                                   name="productIds"
+                                   value="@product.Id"
+                                   id="product_@product.Id"
+                                   data-price="@product.Price"
+                                   data-stock="@product.QuantityInStock" />
+                            <label class="form-check-label" for="product_@product.Id">
+                                <strong>@product.Name</strong> (SKU: @product.Sku) -
+                                @product.Price.ToString("C") -
+                                Dostępnych: @product.QuantityInStock
+                            </label>
+                        </div>
+                        <div class="quantity-input mt-1" style="display: none;">
+                            <label for="quantity_@product.Id">Ilość:</label>
+                            <input type="number"
+                                   class="form-control form-control-sm w-auto d-inline-block ms-2"
+                                   name="quantities"
+                                   id="quantity_@product.Id"
+                                   min="1"
+                                   max="@product.QuantityInStock"
+                                   value="1"
+                                   style="width: 100px;" />
+                            <span class="text-muted ms-2">Max: @product.QuantityInStock</span>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Złóż zamówienie</button>
+        <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Pokazuj/ukryj pole ilości gdy checkbox jest zaznaczony
+            $('.product-checkbox').change(function () {
+                var quantityDiv = $(this).closest('.product-item').find('.quantity-input');
+                if (this.checked) {
+                    quantityDiv.show();
+                } else {
+                    quantityDiv.hide();
+                }
+            });
+
+            // Walidacja przed wysłaniem
+            $('#orderForm').submit(function (e) {
+                var checkedBoxes = $('.product-checkbox:checked');
+                if (checkedBoxes.length === 0) {
+                    alert('Wybierz co najmniej jeden produkt!');
+                    e.preventDefault();
+                    return false;
+                }
+
+                // Sprawdź czy ilości są poprawne
+                var isValid = true;
+                checkedBoxes.each(function () {
+                    var productId = $(this).val();
+                    var quantityInput = $('#quantity_' + productId);
+                    var quantity = parseInt(quantityInput.val());
+                    var maxStock = parseInt($(this).data('stock'));
+
+                    if (quantity < 1 || quantity > maxStock) {
+                        alert('Ilość dla produktu musi być między 1 a ' + maxStock);
+                        isValid = false;
+                        return false;
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                }
+
+                return isValid;
+            });
+        });
+    </script>
+}

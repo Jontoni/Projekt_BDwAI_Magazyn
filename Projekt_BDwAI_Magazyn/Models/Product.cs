@@ -7,19 +7,22 @@ namespace Projekt_BDwAI_Magazyn.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(100)]
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = null!;
 
         [Required]
-        [StringLength(50)]
-        public string Sku { get; set; } = string.Empty;
+        public string Sku { get; set; } = null!;
 
-        [Range(0, 100000)]
+        [Required]
+        [Range(0.01, double.MaxValue)]
         public decimal Price { get; set; }
 
-        [Range(0, 100000)]
+        [Required]
+        [Range(0, int.MaxValue)]
         public int QuantityInStock { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        // Relacja do OrderItem (opcjonalnie)
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }
