@@ -125,7 +125,7 @@ Dostęp do wybranych funkcjonalności jest ograniczony atrybutem `[Authorize]`.
 
 ---
 
-## 🔌 API CRUD (wymaganie projektowe)
+## 🔌 API CRUD
 
 Aplikacja udostępnia **REST API CRUD** dla głównej encji **Product**.
 
