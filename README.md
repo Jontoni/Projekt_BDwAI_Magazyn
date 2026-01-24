@@ -5,9 +5,7 @@
 ## 📝 Opis projektu
 Aplikacja webowa wykonana w technologii **ASP.NET Core MVC**, umożliwiająca zarządzanie
 produktami, zamówieniami oraz stanem magazynowym.  
-Projekt został zaprojektowany zgodnie z wzorcem **MVC (Model–View–Controller)** i spełnia
-wymagania specyfikacji projektowej przedmiotu BDwAI.
-
+Projekt został zaprojektowany zgodnie z wzorcem **MVC (Model–View–Controller)**.
 ---
 
 ## 🛠️ Technologie
